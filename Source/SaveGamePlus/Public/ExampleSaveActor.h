@@ -1,6 +1,4 @@
-﻿// 版权归ETERNAL星九所有.
-
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "SaveGameSerializable.h"

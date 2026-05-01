@@ -1,8 +1,4 @@
-﻿// 版权归ETERNAL星九所有.
-
-
-#include "ExampleSaveActor.h"
-
+﻿#include "ExampleSaveActor.h"
 #include "SaveGamePlusStatics.h"
 
 
