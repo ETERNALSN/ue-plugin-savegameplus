@@ -1,5 +1,3 @@
-// 版权归ETERNAL星九所有.
-
 #pragma once
 
 #include "CoreMinimal.h"

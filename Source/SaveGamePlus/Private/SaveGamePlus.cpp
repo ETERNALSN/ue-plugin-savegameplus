@@ -1,7 +1,4 @@
-// Copyright EternalVU. All Rights Reserved.
-
 #include "SaveGamePlus.h"
-
 #include "SaveGamePlusStatics.h"
 
 DEFINE_LOG_CATEGORY(LogSaveGamePlus);
