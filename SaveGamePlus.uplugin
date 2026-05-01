@@ -1,0 +1,20 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "Save Game Plus",
+	"Description": "A complete custom SaveGame system with slot management, auto-save, async operations, metadata, thumbnails, and extensible validation pipeline.",
+	"Category": "Other",
+	"CreatedBy": "EternalVU",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "SaveGamePlus",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
