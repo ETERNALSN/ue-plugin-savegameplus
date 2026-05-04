@@ -84,7 +84,7 @@ public:
  * 保存游戏自定义头文件工厂
  * 使用示例:在模块启动StartupModule函数中调用FSaveGameCustomHeaderFactory::RegisterHeaderType注册自定义文件头
  */
-class FSaveGameCustomHeaderFactory
+class SAVEGAMEPLUS_API FSaveGameCustomHeaderFactory
 {
 public:
 	DECLARE_DELEGATE_RetVal(TSharedPtr<ISaveGameCustomHeader>,FCreateHeaderDelegate);
