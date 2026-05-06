@@ -28,7 +28,18 @@ public:
     FString PlayerName;
 };
 ```
-
+### [可选] 实现ISavableObject
+实现该接口来让自动保存子系统能够收集关卡中需要保存的Actor
+```
+UCLASS()
+class AMyActor : public AActor, public ISavableObject
+{
+    GENERATED_BODY()
+    
+    virtual FName GetSaveType() overrider;
+    virtual FDynamicActorSaveData GetDynamicActorSaveData() const override;
+};
+```
 ### [可选] 自定义文件头
 
 ```cpp
@@ -47,37 +58,6 @@ USaveGamePlusStatics::SaveGameToSlotEx(SaveObj, TEXT("Slot1"), Header);
 
 // 加载时校验 Header 类型
 Config.ExpectedCustomHeaderType = FName("MyHeader");
-```
-
-### [可选] 实现 ISaveGameSerializable 自定义序列化
-
-想要对某些对象或复杂属性进行序列化,可以让 SaveGame 子类实现接口
-```cpp
-class UMySaveGame : public USaveGame, public ISaveGameSerializable
-{
-    UPROPERTY(SaveGame)
-    AMyActor* MyActor
-
-    virtual void SerializeSaveGame(FArchive& Ar) override
-    {
-        //检查是否为SaveGame
-        if (Ar.IsSaveGame())
-        {
-            //检查当前是保存还是加载
-            if (Ar.IsSaving())
-            {
-                //序列化Actor中被标记为SaveGame的属性
-                MyActor->Serialize(Ar);
-            }
-            
-            if (Ar.IsLoading())
-            {
-                //反序列化
-                MyActor->Serialize(Ar);
-            }
-        }
-    }
-};
 ```
 
 ### 同步保存/加载
@@ -120,3 +100,7 @@ USaveGamePlusStatics::DoesSlotExist(TEXT("Slot1"));
 USaveGamePlusStatics::DeleteSlot(TEXT("Slot1"));
 TArray<FString> Slots = USaveGamePlusStatics::GetAllSlots();
 ```
+
+### 自动保存子系统
+新增GameInstanceSubsystem: UAutoSaveSubsystem
+设置自动保存时间后,需要手动解除TimerHandle对应Timer的暂停状态,自动保存时会调用委托

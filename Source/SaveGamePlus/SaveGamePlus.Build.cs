@@ -25,7 +25,8 @@ public class SaveGamePlus : ModuleRules
 				"ImageWrapper",
 				"Projects",
 				"ImageWrapper",
-				"OodleDataCompression"
+				"OodleDataCompression",
+				"DeveloperSettings"
 			}
 		);
 	}
