@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "SaveGameSerializable.h"
+#include "Interface/SavableObject.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/SaveGame.h"
 #include "ExampleSaveActor.generated.h"
@@ -11,7 +11,7 @@ struct FSaveGameLoadResult;
 class USaveGame;
 
 UCLASS()
-class SAVEGAMEPLUS_API AExampleSaveActor : public AActor
+class SAVEGAMEPLUS_API AExampleSaveActor : public AActor,public ISavableObject
 {
 	GENERATED_BODY()
 
@@ -26,6 +26,16 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+	virtual FName GetSaveType() const override
+	{
+		return FName("Example");
+	}
+	virtual FDynamicActorSaveData GetDynamicActorSaveData() const override
+	{
+		FDynamicActorSaveData SaveData = {};
+		return SaveData;
+	};
 	
 	UFUNCTION(BlueprintCallable)
 	void Save(USaveGame* SaveGameObject, const FString& SlotName);
@@ -45,7 +55,7 @@ public:
 };
 
 UCLASS()
-class UExampleSaveGamePlus : public USaveGame,public ISaveGameSerializable
+class UExampleSaveGamePlus : public USaveGame
 {
 	GENERATED_BODY()
 
@@ -53,5 +63,6 @@ public:
 	UPROPERTY(SaveGame,BlueprintReadWrite)
 	AExampleSaveActor* ExampleSaveActor;
 	
-	virtual void SerializeSaveGame(FArchive& Ar) override;
+	UPROPERTY(SaveGame)
+	TArray<FDynamicActorSaveData> DynamicActors;
 };

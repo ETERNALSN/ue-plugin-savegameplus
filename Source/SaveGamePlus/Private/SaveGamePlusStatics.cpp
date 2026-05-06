@@ -1,6 +1,4 @@
 #include "SaveGamePlusStatics.h"
-
-#include "SaveGameSerializable.h"
 #include "HAL/PlatformFileManager.h"
 #include "HAL/FileManager.h"
 #include "Async/Async.h"
@@ -66,12 +64,7 @@ bool USaveGamePlusStatics::SaveGameToMemoryEx(
 	FSaveFileHeader StandardHeader;
 	
 	SaveGameObject->Serialize(Archive);
-	//如果实现了存档序列化接口
-	if (auto It = Cast<ISaveGameSerializable>(SaveGameObject))
-	{
-		StandardHeader.bHasCustomSerialization = true;
-		It->SerializeSaveGame(Archive);
-	}
+
 	StandardHeader.OriginalSize = PayloadData.Num();
 	StandardHeader.PayloadCRC = CalculateCRC32(PayloadData);
 	
@@ -81,16 +74,13 @@ bool USaveGamePlusStatics::SaveGameToMemoryEx(
 		int32 CompressedSize = PayloadData.Num() *4 /3 + 16;	//预留空间
 		FinalPayloadData.SetNumUninitialized(CompressedSize);
 		
-		FOodleDataCompression::ECompressor Compressor = FOodleDataCompression::ECompressor::Kraken;
-		FOodleDataCompression::ECompressionLevel Level = FOodleDataCompression::ECompressionLevel::Normal;
-		
 		if (FOodleDataCompression::Compress(
 			FinalPayloadData.GetData(),
 			CompressedSize,
 			PayloadData.GetData(),
 			PayloadData.Num(),
-			Compressor,
-			Level))
+			FOodleDataCompression::ECompressor::Kraken,
+			FOodleDataCompression::ECompressionLevel::Normal))
 		{
 			FinalPayloadData.SetNum(CompressedSize);
 			StandardHeader.bIsCompressed = true;
@@ -311,13 +301,6 @@ bool USaveGamePlusStatics::LoadGameFromMemoryEx(
 
 	OutResult.SaveGameObject = NewObject<USaveGame>(GetTransientPackage(), Config.SaveGameClass);
 	OutResult.SaveGameObject->Serialize(Archive);
-	if (StandardHeader.bHasCustomSerialization)
-	{
-		if (auto It = Cast<ISaveGameSerializable>(OutResult.SaveGameObject))
-		{
-			It->SerializeSaveGame(Archive);
-		}
-	}
 	OutResult.CustomHeader = LoadedCustomHeader;
 	OutResult.bSuccess = true;
 

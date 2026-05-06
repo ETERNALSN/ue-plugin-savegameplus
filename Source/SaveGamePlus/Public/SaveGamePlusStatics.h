@@ -44,14 +44,12 @@ struct FSaveFileHeader
 		, CompressedSize(0)
 		, bIsCompressed(false)
 		, PayloadCRC(0)
-		, bHasCustomSerialization(false)
 	{}
 	uint16 FileVersion;
 	int64 OriginalSize;
 	int64 CompressedSize;
 	bool bIsCompressed;
 	uint32 PayloadCRC;
-	bool bHasCustomSerialization;
 	
 	friend  FArchive& operator<<(FArchive& Ar, FSaveFileHeader& Header)
 	{
@@ -60,7 +58,6 @@ struct FSaveFileHeader
 		Ar << Header.OriginalSize;
 		Ar << Header.CompressedSize;
 		Ar << Header.PayloadCRC;
-		Ar << Header.bHasCustomSerialization;
 		return Ar;
 	}
 };
